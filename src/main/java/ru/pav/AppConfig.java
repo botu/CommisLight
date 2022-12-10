@@ -1,17 +1,13 @@
 package ru.pav;
 
-import org.h2.server.web.WebServlet;
+
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 @Configuration
+@EnableR2dbcRepositories
 public class AppConfig {
 
-    @Bean
-    public ServletRegistrationBean h2servletRegistration() {
-        ServletRegistrationBean registration = new ServletRegistrationBean(new WebServlet());
-        registration.addUrlMappings("/console/*");
-        return registration;
-    }
 }

@@ -1,8 +1,15 @@
 package ru.pav.service.dao.intfs;
 
+import reactor.core.publisher.Mono;
 import ru.pav.model.entity.ClientEntity;
 
+import java.util.List;
+
 public interface IClientDao {
-    ClientEntity save(ClientEntity clientEntity);
-    ClientEntity getById(String id);
+    Mono<ClientEntity> save(ClientEntity clientEntity);
+    Mono<ClientEntity> getById(String id);
+
+    void saveList(List<ClientEntity> listOfCLients);
+
+    Mono<Long> getCount();
 }

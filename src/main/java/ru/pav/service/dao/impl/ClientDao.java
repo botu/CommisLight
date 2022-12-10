@@ -5,9 +5,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 import ru.pav.model.entity.ClientEntity;
 import ru.pav.repository.ClientRepository;
 import ru.pav.service.dao.intfs.IClientDao;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -17,15 +20,25 @@ public class ClientDao implements IClientDao {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public ClientEntity save(ClientEntity clientEntity) {
-        return clientRepository.saveAndFlush(clientEntity);
-
+    public Mono<ClientEntity> save(ClientEntity clientEntity) {
+       return clientRepository.save(clientEntity);
     }
 
     @Override
     @Cacheable(key = "id")
-    public ClientEntity getById(String id) {
+    public Mono<ClientEntity> getById(String id) {
         System.out.println("getById");
-        return clientRepository.getById(id);
+        return clientRepository.findById(id);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void saveList(List<ClientEntity> listOfCLients) {
+        clientRepository.saveAll(listOfCLients);
+    }
+
+    @Override
+    public Mono<Long> getCount() {
+        return clientRepository.count();
     }
 }

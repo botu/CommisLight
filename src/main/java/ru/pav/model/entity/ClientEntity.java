@@ -1,45 +1,52 @@
 package ru.pav.model.entity;
 
-import lombok.Generated;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 import ru.pav.model.ClientModel;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Objects;
 
-@Entity
-@Table(name="CLIENTS")
+@Data
 @Getter
 @Setter
-public class ClientEntity {
+@Table(name = "Clients")
+public class ClientEntity implements Persistable<String> {
 
     @Id
-    @Column(name="CLIENT_CODE",updatable = false)
+    @Column(value = "CLIENT_CODE")
     String clientCode;
 
 
-    @UpdateTimestamp
-    Date updateTime;
 
-    @CreationTimestamp
-    Date creationTime;
+    LocalDateTime updateTime = LocalDateTime.now();
+    LocalDateTime creationTime;
+
 
     String name;
     Boolean margin;
 
-    public ClientEntity(){}
+
+    public ClientEntity() {
+
+
+    }
 
     public ClientEntity(ClientModel client) {
-        this.creationTime = new Date();
+        this.creationTime = LocalDateTime.now();
         this.clientCode = client.getClientCode();
-        this.margin     = client.getMargin();
-        this.name       = client.getName();
+        this.margin = client.getMargin();
+        this.name = client.getName();
     }
 
     @Override
@@ -50,8 +57,7 @@ public class ClientEntity {
             return true;
 
         //if (obj instanceof ClientEntity)
-        if (obj.getClass().equals(this.getClass()))
-        {
+        if (obj.getClass().equals(this.getClass())) {
             ClientEntity temp = (ClientEntity) obj;
             return ((temp.getMargin().equals(this.getMargin()))
                     && (temp.name.equals(this.name))
@@ -59,5 +65,17 @@ public class ClientEntity {
         }
         return false;
 
+    }
+
+
+    @Override
+    public String getId() {
+        return clientCode;
+    }
+
+    @Override
+    @Transient
+    public boolean isNew() {
+        return true;
     }
 }

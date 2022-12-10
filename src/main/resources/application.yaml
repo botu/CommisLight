@@ -1,17 +1,41 @@
+#spring:
+#  r2dbc:
+#    url: r2dbc:h2:mem:///mydb?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    username: sa
+#    password: password
+#    driverClassName: org.h2.Driver
+#  datasource:
+#    url: jdbc:h2:mem:mydb
+#    username: sa
+#    password: password
+#    driverClassName: org.h2.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: none
+#    show-sql: false
+#    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+#
 spring:
-  datasource:
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/postgres
+    username: admin
+    password: admin
   jpa:
+    hibernate:
+      ddl-auto: CREATE
     show-sql: true
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
 
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    io.r2dbc.postgresql.QUERY: DEBUG # for queries
+    io.r2dbc.postgresql.PARAM: DEBUG # for parameters
+
 
 property:
   version: 1.0
