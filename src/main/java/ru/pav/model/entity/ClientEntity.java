@@ -27,6 +27,14 @@ public class ClientEntity implements Persistable<String> {
     @Column(value = "CLIENT_CODE")
     String clientCode;
 
+    @Transient
+    private boolean isNew;
+
+    @Transient
+    public void setIsNew(boolean isNew)
+    {
+        this.isNew = isNew;
+    }
 
 
     LocalDateTime updateTime = LocalDateTime.now();
@@ -76,6 +84,6 @@ public class ClientEntity implements Persistable<String> {
     @Override
     @Transient
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }

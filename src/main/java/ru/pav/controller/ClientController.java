@@ -1,5 +1,7 @@
 package ru.pav.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,19 @@ public class ClientController {
             return ResponseEntity.internalServerError().body(false);
         }
     }
+
+    @PostMapping("/listString")
+    public void getList(@RequestBody String payload) throws JsonProcessingException {
+
+        System.out.println(payload);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ClientModelList clientModelList = objectMapper.readValue(payload, ClientModelList.class);
+        // System.out.println(clientModelList);
+        List<ClientEntity> listOfCLients = clientModelList.getClientModelList().stream().map(ClientService::mapperFromJsonToEntity).collect(Collectors.toList());
+        clientService.save(listOfCLients);
+    }
+
 
     @PostMapping("/list")
     public void getList(@RequestBody ClientModelList clientModelList)
